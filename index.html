@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Why Do We Celebrate Halloween? | History – ClickView</title>
+  <link rel="icon" type="image/png" sizes="48x48" href="favicon.png">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --correct: #22c55e;
+      --incorrect: #ef4444;
+      --border: #334155;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 24px 16px 60px;
+    }
+
+    .container { max-width: 860px; margin: 0 auto; }
+
+    h1 {
+      font-size: 1.55rem;
+      margin-bottom: 6px;
+      color: #f8fafc;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin-bottom: 20px;
+      font-size: 1.05rem;
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      background: #000;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: 0;
+    }
+
+    .video-fallback {
+      text-align: center;
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .video-fallback a { color: var(--accent); }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .nav button {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav button:hover { border-color: var(--accent); color: var(--accent); }
+
+    .nav button.active {
+      background: var(--accent);
+      color: #0f172a;
+      border-color: var(--accent);
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .instructions {
+      color: var(--muted);
+      margin-bottom: 22px;
+      font-size: 1.02rem;
+    }
+
+    .question {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+    }
+
+    .question h3 {
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      color: #f1f5f9;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 11px 13px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #0f172a;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      user-select: none;
+    }
+
+    .option:hover { border-color: var(--accent); background: #1e293b; }
+
+    .option input[type="radio"] {
+      margin-top: 3px;
+      accent-color: var(--accent);
+      width: 17px; height: 17px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .option span { flex: 1; }
+
+    .option.correct {
+      background: rgba(34, 197, 94, 0.18);
+      border-color: var(--correct);
+      color: #bbf7d0;
+    }
+
+    .option.incorrect {
+      background: rgba(239, 68, 68, 0.18);
+      border-color: var(--incorrect);
+      color: #fecaca;
+    }
+
+    /* Vocabulary */
+    .vocab-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .vocab-item .ru {
+      color: #f1f5f9;
+      font-size: 1.02rem;
+    }
+
+    .vocab-item input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #0f172a;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .vocab-item input[type="text"]:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .vocab-item.correct input {
+      border-color: var(--correct);
+      background: rgba(34, 197, 94, 0.12);
+    }
+
+    .vocab-item.incorrect input {
+      border-color: var(--incorrect);
+      background: rgba(239, 68, 68, 0.12);
+    }
+
+    .feedback {
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    .feedback.correct { color: var(--correct); }
+    .feedback.incorrect { color: var(--incorrect); }
+
+    /* Gap fills */
+    .word-bank {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .word-bank strong { color: #f1f5f9; }
+
+    .gap-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      line-height: 1.7;
+    }
+
+    .gap-item input[type="text"] {
+      display: inline-block;
+      width: 140px;
+      padding: 6px 10px;
+      margin: 0 4px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #0f172a;
+      color: var(--text);
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    .gap-item input[type="text"]:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .gap-item.correct input {
+      border-color: var(--correct);
+      background: rgba(34, 197, 94, 0.12);
+    }
+
+    .gap-item.incorrect input {
+      border-color: var(--incorrect);
+      background: rgba(239, 68, 68, 0.12);
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 28px 0 16px;
+      align-items: center;
+    }
+
+    button.primary {
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      padding: 12px 22px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button.primary:hover { opacity: 0.9; }
+
+    button.secondary {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 12px 22px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #score1, #score2, #score3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #f8fafc;
+      margin-left: 8px;
+    }
+
+    .footer-note {
+      margin-top: 28px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.show { display: flex; }
+
+    .modal {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+
+    .modal .score-big {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 8px;
+    }
+
+    .modal .message {
+      font-size: 1.25rem;
+      color: var(--text);
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+
+    .modal button {
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      padding: 12px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .modal button:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Why Do We Celebrate Halloween? | History</h1>
+    <p class="subtitle">by ClickView</p>
+
+    <div class="video-wrapper">
+      <iframe
+        src="https://www.youtube.com/embed/KWO083Amf5I?rel=0"
+        title="Why Do We Celebrate Halloween? | History – ClickView"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+      </iframe>
+    </div>
+    <p class="video-fallback">
+      If the video appears as a black square,
+      <a href="https://youtu.be/KWO083Amf5I" target="_blank" rel="noopener">watch it directly on YouTube here</a>.
+    </p>
+
+    <div class="nav">
+      <button class="active" data-page="1">Listening Comprehension</button>
+      <button data-page="2">Vocabulary</button>
+      <button data-page="3">Vocabulary practice</button>
+    </div>
+
+    <!-- PAGE 1: Listening -->
+    <div class="page active" id="page1">
+      <p class="instructions">Watch the video and choose the correct answer.</p>
+
+      <form id="form1">
+        <div class="question" data-correct="B">
+          <h3>1. What did the ancient Celts believe happened on October 31st?</h3>
+          <div class="options">
+            <label class="option"><input type="radio" name="q1" value="A"> <span>A) The harvest season officially ended.</span></label>
+            <label class="option"><input type="radio" name="q1" value="B"> <span>B) The spirits of the dead could enter the physical world.</span></label>
+            <label class="option"><input type="radio" name="q1" value="C"> <span>C) The gods chose new leaders for their communities.</span></label>
+            <label class="option"><input type="radio" name="q1" value="D"> <span>D) The living could communicate with the Roman gods.</span></label>
+          </div>
+        </div>
+
+        <div class="question" data-correct="C">
+          <h3>2. Why did the Celts wear disguises during Samhain?</h3>
+          <div class="options">
+            <label class="option"><input type="radio" name="q2" value="A"> <span>A) To celebrate the beginning of a new season.</span></label>
+            <label class="option"><input type="radio" name="q2" value="B"> <span>B) To show their social status.</span></label>
+            <label class="option"><input type="radio" name="q2" value="C"> <span>C) To avoid being recognised by spirits and frighten them away.</span></label>
+            <label class="option"><input type="radio" name="q2" value="D"> <span>D) To prepare for traditional competitions.</span></label>
+          </div>
+        </div>
+
+        <div class="question" data-correct="A">
+          <h3>3. Which two Roman festivals gradually merged with Samhain?</h3>
+          <div class="options">
+            <label class="option"><input type="radio" name="q3" value="A"> <span>A) Feralia and a festival for Pomona.</span></label>
+            <label class="option"><input type="radio" name="q3" value="B"> <span>B) Saturnalia and a festival for Jupiter.</span></label>
+            <label class="option"><input type="radio" name="q3" value="C"> <span>C) Lupercalia and a festival for Mars.</span></label>
+            <label class="option"><input type="radio" name="q3" value="D"> <span>D) Floralia and a festival for Venus.</span></label>
+          </div>
+        </div>
+
+        <div class="question" data-correct="B">
+          <h3>4. How might the Roman goddess Pomona have influenced Halloween traditions?</h3>
+          <div class="options">
+            <label class="option"><input type="radio" name="q4" value="A"> <span>A) Her association with fire inspired bonfires.</span></label>
+            <label class="option"><input type="radio" name="q4" value="B"> <span>B) Her symbol, an apple, may explain the tradition of bobbing for apples.</span></label>
+            <label class="option"><input type="radio" name="q4" value="C"> <span>C) Her connection with death inspired costumes.</span></label>
+            <label class="option"><input type="radio" name="q4" value="D"> <span>D) Her festivals introduced trick-or-treating.</span></label>
+          </div>
+        </div>
+
+        <div class="question" data-correct="B">
+          <h3>5. What is the difference between All Saints’ Day and All Souls’ Day, according to the video?</h3>
+          <div class="options">
+            <label class="option"><input type="radio" name="q5" value="A"> <span>A) All Saints’ Day celebrates the harvest, while All Souls’ Day celebrates the beginning of winter.</span></label>
+            <label class="option"><input type="radio" name="q5" value="B"> <span>B) All Saints’ Day honours people declared saints, while All Souls’ Day remembers deceased loved ones.</span></label>
+            <label class="option"><input type="radio" name="q5" value="C"> <span>C) All Saints’ Day is celebrated on October 31st, while All Souls’ Day is celebrated on November 1st.</span></label>
+            <label class="option"><input type="radio" name="q5" value="D"> <span>D) All Saints’ Day is a pagan festival, while All Souls’ Day is a Roman festival.</span></label>
+          </div>
+        </div>
+
+        <div class="question" data-correct="C">
+          <h3>6. How did Halloween develop into a distinctly American celebration?</h3>
+          <div class="options">
+            <label class="option"><input type="radio" name="q6" value="A"> <span>A) The Romans introduced it to North America.</span></label>
+            <label class="option"><input type="radio" name="q6" value="B"> <span>B) The Celts brought it directly to the United States in ancient times.</span></label>
+            <label class="option"><input type="radio" name="q6" value="C"> <span>C) European traditions merged in North America, and Scottish and Irish immigrants influenced the celebration further.</span></label>
+            <label class="option"><input type="radio" name="q6" value="D"> <span>D) Christian leaders created new Halloween traditions in the United States.</span></label>
+          </div>
+        </div>
+
+        <div class="question" data-correct="D">
+          <h3>7. Why did Americans begin using pumpkins instead of turnips for jack-o’-lanterns?</h3>
+          <div class="options">
+            <label class="option"><input type="radio" name="q7" value="A"> <span>A) Pumpkins were cheaper to paint.</span></label>
+            <label class="option"><input type="radio" name="q7" value="B"> <span>B) Pumpkins were believed to have stronger magical powers.</span></label>
+            <label class="option"><input type="radio" name="q7" value="C"> <span>C) Turnips were considered sacred by the Celts.</span></label>
+            <label class="option"><input type="radio" name="q7" value="D"> <span>D) Pumpkins were more abundant and easier to carve.</span></label>
+          </div>
+        </div>
+
+        <div class="question" data-correct="C">
+          <h3>8. What was the original purpose of carving turnips during the Celtic festival?</h3>
+          <div class="options">
+            <label class="option"><input type="radio" name="q8" value="A"> <span>A) To decorate homes for the harvest.</span></label>
+            <label class="option"><input type="radio" name="q8" value="B"> <span>B) To honour the Roman goddess Pomona.</span></label>
+            <label class="option"><input type="radio" name="q8" value="C"> <span>C) To scare away a mythical character called Stingy Jack.</span></label>
+            <label class="option"><input type="radio" name="q8" value="D"> <span>D) To help spirits find their way home.</span></label>
+          </div>
+        </div>
+
+        <div class="question" data-correct="B">
+          <h3>9. What did children and poor people in Britain traditionally do to receive soul cakes?</h3>
+          <div class="options">
+            <label class="option"><input type="radio" name="q9" value="A"> <span>A) They performed songs and dances in the streets.</span></label>
+            <label class="option"><input type="radio" name="q9" value="B"> <span>B) They visited houses and offered prayers in exchange for treats.</span></label>
+            <label class="option"><input type="radio" name="q9" value="C"> <span>C) They carved vegetables and exchanged them for food.</span></label>
+            <label class="option"><input type="radio" name="q9" value="D"> <span>D) They told ghost stories around bonfires.</span></label>
+          </div>
+        </div>
+
+        <div class="question" data-correct="D">
+          <h3>10. What was guising, a tradition practised in Scotland and Ireland?</h3>
+          <div class="options">
+            <label class="option"><input type="radio" name="q10" value="A"> <span>A) Visiting graveyards to leave food for the dead.</span></label>
+            <label class="option"><input type="radio" name="q10" value="B"> <span>B) Lighting bonfires to protect villages.</span></label>
+            <label class="option"><input type="radio" name="q10" value="C"> <span>C) Hiding objects around houses to frighten neighbours.</span></label>
+            <label class="option"><input type="radio" name="q10" value="D"> <span>D) Wearing costumes and performing tricks or songs in exchange for treats.</span></label>
+          </div>
+        </div>
+      </form>
+
+      <div class="controls">
+        <button type="button" class="primary" id="check1">Check answers</button>
+        <button type="button" class="secondary" id="reset1">Reset</button>
+        <span id="score1"></span>
+      </div>
+    </div>
+
+    <!-- PAGE 2: Vocabulary -->
+    <div class="page" id="page2">
+      <p class="instructions">Can you remember the English equivalents of these words and phrases? Watch the video again and check.</p>
+
+      <form id="form2">
+        <div class="vocab-item" data-answers="spooky">
+          <div class="ru">жуткий, пугающий</div>
+          <input type="text" placeholder="Type English equivalent…">
+          <div class="feedback"></div>
+        </div>
+
+        <div class="vocab-item" data-answers="pagan">
+          <div class="ru">языческий</div>
+          <input type="text" placeholder="Type English equivalent…">
+          <div class="feedback"></div>
+        </div>
+
+        <div class="vocab-item" data-answers="ancient">
+          <div class="ru">древний</div>
+          <input type="text" placeholder="Type English equivalent…">
+          <div class="feedback"></div>
+        </div>
+
+        <div class="vocab-item" data-answers="harvest">
+          <div class="ru">урожай</div>
+          <input type="text" placeholder="Type English equivalent…">
+          <div class="feedback"></div>
+        </div>
+
+        <div class="vocab-item" data-answers="evil spirits|evil spirit">
+          <div class="ru">злые духи</div>
+          <input type="text" placeholder="Type English equivalent…">
+          <div class="feedback"></div>
+        </div>
+
+        <div class="vocab-item" data-answers="to commemorate the dead|commemorate the dead|to honour the departed|honour the departed|to honor the departed|honor the departed|to honour the dead|honour the dead|to honor the dead|honor the dead">
+          <div class="ru">чтить память умерших</div>
+          <input type="text" placeholder="Type English equivalent…">
+          <div class="feedback"></div>
+        </div>
+
+        <div class="vocab-item" data-answers="an old halloween custom|old halloween custom|a halloween custom|halloween custom">
+          <div class="ru">старинный обычай, связанный с Хэллоуином</div>
+          <input type="text" placeholder="Type English equivalent…">
+          <div class="feedback"></div>
+        </div>
+
+        <div class="vocab-item" data-answers="saints|saint">
+          <div class="ru">святые</div>
+          <input type="text" placeholder="Type English equivalent…">
+          <div class="feedback"></div>
+        </div>
+
+        <div class="vocab-item" data-answers="a turnip|turnip|turnips">
+          <div class="ru">репа</div>
+          <input type="text" placeholder="Type English equivalent…">
+          <div class="feedback"></div>
+        </div>
+
+        <div class="vocab-item" data-answers="treats|treat">
+          <div class="ru">угощения; сладости</div>
+          <input type="text" placeholder="Type English equivalent…">
+          <div class="feedback"></div>
+        </div>
+      </form>
+
+      <div class="controls">
+        <button type="button" class="primary" id="check2">Check answers</button>
+        <button type="button" class="secondary" id="reset2">Reset</button>
+        <span id="score2"></span>
+      </div>
+    </div>
+
+    <!-- PAGE 3: Vocabulary practice -->
+    <div class="page" id="page3">
+      <p class="instructions">Fill in the gaps with the missing words.</p>
+      <div class="word-bank">
+        <strong>Word bank:</strong> saints · spirits · custom · ancient · spooky · turnips · commemorate · harvest · pagan · treats
+      </div>
+
+      <form id="form3">
+        <div class="gap-item" data-answer="spooky">
+          The forest looks especially <input type="text" autocomplete="off"> at night.
+          <div class="feedback"></div>
+        </div>
+
+        <div class="gap-item" data-answer="treats">
+          Children dress up in costumes and go door to door asking for <input type="text" autocomplete="off">.
+          <div class="feedback"></div>
+        </div>
+
+        <div class="gap-item" data-answer="commemorate">
+          In some cultures, people visit graves to <input type="text" autocomplete="off"> the dead.
+          <div class="feedback"></div>
+        </div>
+
+        <div class="gap-item" data-answer="custom">
+          Carving pumpkins is an old Halloween <input type="text" autocomplete="off">.
+          <div class="feedback"></div>
+        </div>
+
+        <div class="gap-item" data-answer="harvest">
+          People used to celebrate the <input type="text" autocomplete="off"> at the end of autumn.
+          <div class="feedback"></div>
+        </div>
+
+        <div class="gap-item" data-answer="spirits">
+          People believed that bonfires could protect them from evil <input type="text" autocomplete="off">.
+          <div class="feedback"></div>
+        </div>
+
+        <div class="gap-item" data-answer="ancient">
+          The tradition dates back to <input type="text" autocomplete="off"> times.
+          <div class="feedback"></div>
+        </div>
+
+        <div class="gap-item" data-answer="saints">
+          The church was named after two local <input type="text" autocomplete="off">.
+          <div class="feedback"></div>
+        </div>
+
+        <div class="gap-item" data-answer="pagan">
+          Halloween has its roots in an ancient <input type="text" autocomplete="off"> festival.
+          <div class="feedback"></div>
+        </div>
+
+        <div class="gap-item" data-answer="turnips">
+          Before pumpkins became popular, people carved <input type="text" autocomplete="off"> into lanterns.
+          <div class="feedback"></div>
+        </div>
+      </form>
+
+      <div class="controls">
+        <button type="button" class="primary" id="check3">Check answers</button>
+        <button type="button" class="secondary" id="reset3">Reset</button>
+        <span id="score3"></span>
+      </div>
+    </div>
+
+    <p class="footer-note">Select or type your answers, then click “Check answers” on each section.</p>
+  </div>
+
+  <div class="modal-overlay" id="scoreModal">
+    <div class="modal">
+      <div class="score-big" id="modalScore"></div>
+      <div class="message" id="modalMessage"></div>
+      <button type="button" id="modalClose">OK</button>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.nav button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('page' + btn.dataset.page).classList.add('active');
+      });
+    });
+
+    const messagesListening = {
+       0: "🫣 Try again!",
+       1: "🐌 Keep at it!",
+       2: "🪴 You're learning!",
+       3: "🐨 Good effort!",
+       4: "🍓 Getting better!",
+       5: "🐳 Pretty good!",
+       6: "🎨 Nice work!",
+       7: "🦄 Very good!",
+       8: "⚡ Great work!",
+       9: "🥳 Fantastic!",
+      10: "💎 Outstanding!"
+    };
+
+    const messagesVocab = {
+       0: "🪫 A fresh start is always possible!",
+       1: "🐌 Keep moving forward!",
+       2: "🧱 You're building the basics!",
+       3: "🪁 Let yourself grow!",
+       4: "🐝 Your effort matters!",
+       5: "🍀 You're finding your feet!",
+       6: "🛠️ You're getting stronger!",
+       7: "🎸 You're hitting the right notes!",
+       8: "🦅 You're soaring high!",
+       9: "💫 You're making it look easy!",
+      10: "🥇 You've absolutely smashed it!"
+    };
+
+    const messagesPractice = {
+       0: "🫠 Needs more work!",
+       1: "🐣 Keep practising!",
+       2: "🐙 You're making progress!",
+       3: "🌻 Nice attempt!",
+       4: "🐝 Good start!",
+       5: "🍒 You're getting better!",
+       6: "🐬 Good job!",
+       7: "🎸 Nicely done!",
+       8: "🦁 Great effort!",
+       9: "🌈 Brilliant work!",
+      10: "🏅 Perfect job!"
+    };
+
+    function showScorePopup(score, total, messages) {
+      document.getElementById('modalScore').textContent = `${score} / ${total}`;
+      document.getElementById('modalMessage').textContent = messages[score] || messages[0];
+      document.getElementById('scoreModal').classList.add('show');
+    }
+
+    document.getElementById('modalClose').addEventListener('click', () => {
+      document.getElementById('scoreModal').classList.remove('show');
+    });
+
+    document.getElementById('scoreModal').addEventListener('click', (e) => {
+      if (e.target.id === 'scoreModal') {
+        document.getElementById('scoreModal').classList.remove('show');
+      }
+    });
+
+    // PAGE 1
+    document.getElementById('check1').addEventListener('click', () => {
+      let correct = 0;
+      const questions = document.querySelectorAll('#page1 .question');
+      questions.forEach(q => {
+        const ans = q.dataset.correct;
+        const opts = q.querySelectorAll('.option');
+        const selected = q.querySelector('input:checked');
+        opts.forEach(o => o.classList.remove('correct', 'incorrect'));
+        if (selected) {
+          const opt = selected.closest('.option');
+          if (selected.value === ans) {
+            opt.classList.add('correct');
+            correct++;
+          } else {
+            opt.classList.add('incorrect');
+            opts.forEach(o => {
+              if (o.querySelector('input').value === ans) o.classList.add('correct');
+            });
+          }
+        }
+      });
+      document.getElementById('score1').textContent = `Score: ${correct} / ${questions.length}`;
+      showScorePopup(correct, questions.length, messagesListening);
+    });
+
+    document.getElementById('reset1').addEventListener('click', () => {
+      document.getElementById('form1').reset();
+      document.querySelectorAll('#page1 .option').forEach(o => o.classList.remove('correct', 'incorrect'));
+      document.getElementById('score1').textContent = '';
+    });
+
+    // PAGE 2
+    function normalize(str) {
+      return str.trim().toLowerCase()
+        .replace(/\s+/g, ' ')
+        .replace(/^to\s+/, '')
+        .replace(/^(a|an|the)\s+/, '');
+    }
+
+    document.getElementById('check2').addEventListener('click', () => {
+      let correct = 0;
+      const items = document.querySelectorAll('#page2 .vocab-item');
+      items.forEach(item => {
+        const input = item.querySelector('input');
+        const feedback = item.querySelector('.feedback');
+        const possible = item.dataset.answers.split('|').map(a => normalize(a));
+        const user = normalize(input.value);
+
+        item.classList.remove('correct', 'incorrect');
+        feedback.className = 'feedback';
+        feedback.textContent = '';
+
+        if (!user) return;
+
+        if (possible.some(p => user === p || user === normalize(p))) {
+          item.classList.add('correct');
+          feedback.classList.add('correct');
+          feedback.textContent = '✓ Correct';
+          correct++;
+        } else {
+          item.classList.add('incorrect');
+          feedback.classList.add('incorrect');
+          feedback.textContent = `✗ Expected: ${item.dataset.answers.split('|')[0]}`;
+        }
+      });
+      document.getElementById('score2').textContent = `Score: ${correct} / ${items.length}`;
+      showScorePopup(correct, items.length, messagesVocab);
+    });
+
+    document.getElementById('reset2').addEventListener('click', () => {
+      document.querySelectorAll('#page2 .vocab-item').forEach(item => {
+        item.querySelector('input').value = '';
+        item.classList.remove('correct', 'incorrect');
+        item.querySelector('.feedback').textContent = '';
+        item.querySelector('.feedback').className = 'feedback';
+      });
+      document.getElementById('score2').textContent = '';
+    });
+
+    // PAGE 3
+    document.getElementById('check3').addEventListener('click', () => {
+      let correct = 0;
+      const items = document.querySelectorAll('#page3 .gap-item');
+      items.forEach(item => {
+        const input = item.querySelector('input');
+        const feedback = item.querySelector('.feedback');
+        const possible = item.dataset.answer.toLowerCase().split('|');
+        const user = input.value.trim().toLowerCase();
+
+        item.classList.remove('correct', 'incorrect');
+        feedback.className = 'feedback';
+        feedback.textContent = '';
+
+        if (!user) return;
+
+        if (possible.includes(user)) {
+          item.classList.add('correct');
+          feedback.classList.add('correct');
+          feedback.textContent = '✓ Correct';
+          correct++;
+        } else {
+          item.classList.add('incorrect');
+          feedback.classList.add('incorrect');
+          feedback.textContent = `✗ Expected: ${possible[0]}`;
+        }
+      });
+      document.getElementById('score3').textContent = `Score: ${correct} / ${items.length}`;
+      showScorePopup(correct, items.length, messagesPractice);
+    });
+
+    document.getElementById('reset3').addEventListener('click', () => {
+      document.querySelectorAll('#page3 .gap-item').forEach(item => {
+        item.querySelector('input').value = '';
+        item.classList.remove('correct', 'incorrect');
+        item.querySelector('.feedback').textContent = '';
+        item.querySelector('.feedback').className = 'feedback';
+      });
+      document.getElementById('score3').textContent = '';
+    });
+  </script>
+</body>
+</html>
